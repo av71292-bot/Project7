@@ -1,0 +1,7 @@
+streamlit
+pandas
+scikit-learn
+scipy
+transformers
+torch
+streamlit-mic-recorder
