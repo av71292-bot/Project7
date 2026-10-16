@@ -13,10 +13,118 @@ warnings.filterwarnings('ignore')
 
 # 1. Page Configuration
 st.set_page_config(
-    page_title="Disaster Tweet Classifier", 
-    page_icon="🚨", 
+    page_title="Disaster Tweet Classifier",
+    page_icon="🚨",
     layout="centered"
 )
+
+# Sidebar Text Styling 
+st.markdown(
+    """
+    <style>
+    header[data-testid="stHeader"] {
+        background-color: #0E1117 !important;
+    }
+    .stApp > header {
+        background-color: transparent !important;
+    }
+
+    [data-testid="stSidebar"] {
+        background-color: #1E1E2F !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #FFFFFF !important;
+    }
+
+    .stSelectbox label, .stTextArea label, .stTextInput label {
+        color: #FFFFFF !important;
+        font-weight: 600;
+    }
+
+    .stTextArea small, .stTextInput small, div[data-baseweb="input"] + div {
+        color: #CCCCCC !important;
+    }
+
+    .stTextInput input, .stTextArea textarea {
+        color: #000000 !important;
+        background-color: #FFFFFF !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Robust Translation Function using Google Public Web API
+def translate_text(text):
+    if not text.strip():
+        return text
+    try: 
+        encoded_text = urllib.parse.quote(text)
+        url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q={encoded_text}"
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        response = urllib.request.urlopen(req)
+        data = json.loads(response.read().decode('utf-8'))
+        
+        # Combine translated segments
+        translated_segments = [item[0] for item in data[0] if item[0]]
+        return "".join(translated_segments)
+    except Exception as e:
+        return text
+
+# 2. Custom Styling
+st.markdown("""
+<style>
+    /* Main App Background & Text Color */
+    .stApp {
+        background-color: #0b0f19 !important;
+        color: #ffffff !important;
+    }
+    
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background-color: #111827 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Main Title Styling */
+    .main-title {
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: #ffb44b;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    
+    /* Sub Title Styling */
+    .sub-title {
+        font-size: 1.05rem;
+        color: #94a3b8;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    /* Text Area Styling */
+    .stTextArea textarea {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        border-radius: 10px;
+        border: 1px solid #334155;
+        font-size: 1rem;
+    }
+    
+    /* Text Area Focus Effect */
+    .stTextArea textarea:focus {
+        border-color: #ffb44b;
+        box-shadow: 0 0 8px rgba(255, 180, 75, 0.3);
+    }
+
+    /* Buttons Styling */
+    .stButton>button {
+        border-radius: 8px;
+        font-weight: 600;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Robust Translation Function using Google Public Web API
 def translate_text(text):
